@@ -1,0 +1,1 @@
+Make a solitaire game.  It must be able to run in a browser.
