@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solitaire</title>
+<style>
+  :root {
+    --cw: 100px;
+    --ch: 140px;
+    --gap: 10px;
+    --header-h: 52px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: radial-gradient(ellipse at center, #157a3e 0%, #0b5a2c 70%, #07421f 100%);
+    color: #fff;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  header {
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 16px;
+    background: rgba(0,0,0,.25);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .title { font-size: 20px; font-weight: 700; white-space: nowrap; }
+  .controls { display: flex; gap: 8px; align-items: center; }
+  button, select {
+    font: inherit;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.3);
+    background: rgba(255,255,255,.12);
+    color: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: rgba(255,255,255,.25); }
+  button:active { transform: translateY(1px); }
+  select option { color: #000; }
+  label { font-size: 14px; white-space: nowrap; }
+  .stats { margin-left: auto; font-size: 14px; white-space: nowrap; }
+  .stats b { font-variant-numeric: tabular-nums; }
+
+  #board {
+    height: calc(100vh - var(--header-h));
+    display: grid;
+    grid-template-columns: repeat(7, var(--cw));
+    grid-template-rows: var(--ch) 1fr;
+    gap: var(--gap) var(--gap);
+    justify-content: center;
+    padding: var(--gap);
+  }
+  .pile { position: relative; }
+  .slot {
+    position: absolute;
+    top: 0; left: 0;
+    width: var(--cw);
+    height: var(--ch);
+    border: 2px dashed rgba(255,255,255,.35);
+    border-radius: calc(var(--cw) * .07);
+    background: rgba(0,0,0,.15);
+  }
+  .card {
+    position: absolute;
+    top: 0; left: 0;
+    width: var(--cw);
+    height: var(--ch);
+    border-radius: calc(var(--cw) * .07);
+    background: #fdfdf6;
+    border: 1px solid #999;
+    box-shadow: 1px 2px 4px rgba(0,0,0,.4);
+    cursor: pointer;
+    font-size: calc(var(--cw) * .19);
+    line-height: 1.05;
+    color: #111;
+  }
+  .card.red { color: #c92228; }
+  .card.back {
+    background: repeating-linear-gradient(45deg, #1e5fa8 0 6px, #2b74c9 6px 12px);
+    border: 2px solid #e8e8e8;
+  }
+  .card .c { position: absolute; text-align: center; font-weight: 700; }
+  .card .tl { top: calc(var(--cw)*.05); left: calc(var(--cw)*.07); }
+  .card .br { bottom: calc(var(--cw)*.05); right: calc(var(--cw)*.07); transform: rotate(180deg); }
+  .card .mid {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: calc(var(--cw) * .45);
+    opacity: .85;
+  }
+  .card.selected {
+    outline: 3px solid #ffd54a;
+    outline-offset: -1px;
+    box-shadow: 0 0 14px rgba(255,213,74,.9);
+  }
+  .pile.hint > .slot { outline: 3px dashed #ffd54a; outline-offset: -1px; }
+  .pile.hint > .card:last-of-type { box-shadow: 0 0 12px rgba(255,213,74,.8); }
+
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  #overlay.show { display: flex; }
+  #overlay .panel {
+    background: #fffdf4;
+    color: #222;
+    border-radius: 14px;
+    padding: 36px 48px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5);
+  }
+  #overlay h2 { font-size: 34px; margin-bottom: 8px; }
+  #overlay p { margin-bottom: 20px; color: #555; }
+  #overlay button { background: #157a3e; border: none; font-size: 16px; padding: 10px 22px; }
+  #overlay button:hover { background: #1a934b; }
+</style>
+</head>
+<body>
+<header>
+  <div class="title">&#9824; Solitaire</div>
+  <div class="controls">
+    <button id="newBtn">New Game</button>
+    <button id="undoBtn">&#8630; Undo</button>
+    <button id="autoBtn">&#9889; Auto</button>
+    <label>Draw <select id="drawSel"><option value="1">1</option><option value="3">3</option></select></label>
+  </div>
+  <div class="stats">Moves <b id="movesEl">0</b> &nbsp;&middot;&nbsp; Time <b id="timeEl">0:00</b></div>
+</header>
+
+<div id="board"></div>
+
+<div id="overlay">
+  <div class="panel">
+    <h2>&#127942; You win!</h2>
+    <p id="winStats"></p>
+    <button id="playAgainBtn">Play again</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  const SUITS = [
+    { sym: '\u2660', color: 'black' },
+    { sym: '\u2665', color: 'red' },
+    { sym: '\u2666', color: 'red' },
+    { sym: '\u2663', color: 'black' }
+  ];
+  const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+  const board = document.getElementById('board');
+  const movesEl = document.getElementById('movesEl');
+  const timeEl = document.getElementById('timeEl');
+  const overlay = document.getElementById('overlay');
+
+  let state, history, sel, won;
+  let moves = 0, drawCount = 1;
+  let startTime = null, timerId = null;
+
+  function newDeck() {
+    const d = [];
+    for (let s = 0; s < 4; s++)
+      for (let r = 1; r <= 13; r++)
+        d.push({ suit: s, rank: r, up: false });
+    return d;
+  }
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function newGame() {
+    const deck = shuffle(newDeck());
+    state = { stock: [], waste: [], foundations: [[], [], [], []], tableau: [[], [], [], [], [], [], []] };
+    for (let i = 0; i < 7; i++)
+      for (let j = i; j < 7; j++) {
+        const c = deck.pop();
+        c.up = (j === 6);
+        state.tableau[i].push(c);
+      }
+    state.stock = deck;
+    history = []; sel = null; won = false; moves = 0;
+    startTime = null; clearInterval(timerId);
+    timeEl.textContent = '0:00';
+    overlay.classList.remove('show');
+    render();
+  }
+
+  function pushHistory() {
+    history.push(JSON.stringify(state));
+    if (history.length > 600) history.shift();
+  }
+  function undo() {
+    if (!history.length || won) return;
+    state = JSON.parse(history.pop());
+    sel = null;
+    render();
+  }
+
+  function startTimer() {
+    if (startTime) return;
+    startTime = Date.now();
+    timerId = setInterval(() => {
+      const s = Math.floor((Date.now() - startTime) / 1000);
+      timeEl.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }, 500);
+  }
+  function stopTimer() { clearInterval(timerId); }
+
+  function pileOf(loc) {
+    if (loc.type === 'stock') return state.stock;
+    if (loc.type === 'waste') return state.waste;
+    if (loc.type === 'foundation') return state.foundations[loc.pile];
+    return state.tableau[loc.pile];
+  }
+
+  function movable(loc) {
+    const p = pileOf(loc);
+    if (!p || loc.card < 0 || loc.card >= p.length) return null;
+    if (loc.type === 'waste' || loc.type === 'foundation')
+      return loc.card === p.length - 1 ? [p[p.length - 1]] : null;
+    if (loc.type === 'tableau') {
+      const cards = p.slice(loc.card);
+      if (cards.some(c => !c.up)) return null;
+      for (let i = 1; i < cards.length; i++) {
+        const a = cards[i - 1], b = cards[i];
+        if (a.rank !== b.rank + 1 || SUITS[a.suit].color === SUITS[b.suit].color) return null;
+      }
+      return cards;
+    }
+    return null;
+  }
+
+  function canDrop(cards, dest) {
+    if (dest.type !== 'tableau' && dest.type !== 'foundation') return false;
+    const p = pileOf(dest);
+    if (dest.type === 'foundation') {
+      if (cards.length !== 1) return false;
+      const c = cards[0];
+      if (!p.length) return c.rank === 1;
+      const t = p[p.length - 1];
+      return t.suit === c.suit && c.rank === t.rank + 1;
+    }
+    const head = cards[0];
+    if (!p.length) return head.rank === 13;
+    const t = p[p.length - 1];
+    return t.up && t.rank === head.rank + 1 && SUITS[t.suit].color !== SUITS[head.suit].color;
+  }
+
+  function tryMoveTo(dest) {
+    if (!sel) return false;
+    if (sel.type === dest.type && sel.pile === dest.pile) return false;
+    const cards = movable(sel);
+    if (!cards || !canDrop(cards, dest)) return false;
+    pushHistory(); startTimer();
+    pileOf(sel).splice(sel.card, cards.length);
+    pileOf(dest).push(...cards);
+    const sp = pileOf(sel);
+    if (sel.type === 'tableau' && sp.length && !sp[sp.length - 1].up) sp[sp.length - 1].up = true;
+    moves++; sel = null;
+    checkWin(); render();
+    return true;
+  }
+
+  function clickStock() {
+    if (!state.stock.length && !state.waste.length) return;
+    pushHistory(); startTimer();
+    if (state.stock.length) {
+      for (let i = 0; i < drawCount && state.stock.length; i++) {
+        const c = state.stock.pop(); c.up = true; state.waste.push(c);
+      }
+    } else {
+      while (state.waste.length) {
+        const c = state.waste.pop(); c.up = false; state.stock.push(c);
+      }
+    }
+    moves++; sel = null; render();
+  }
+
+  function autoToFoundation(loc) {
+    const cards = movable(loc);
+    if (!cards || cards.length !== 1) return false;
+    for (let f = 0; f < 4; f++) {
+      sel = { type: loc.type, pile: loc.pile, card: loc.card };
+      if (tryMoveTo({ type: 'foundation', pile: f })) return true;
+    }
+    return false;
+  }
+
+  function autoFinish() {
+    if (won) return;
+    startTimer();
+    let moved = true;
+    while (moved) {
+      moved = false;
+      const locs = [];
+      if (state.waste.length) locs.push({ type: 'waste', pile: 0, card: state.waste.length - 1 });
+      for (let i = 0; i < 7; i++) {
+        const t = state.tableau[i];
+        if (t.length && t[t.length - 1].up) locs.push({ type: 'tableau', pile: i, card: t.length - 1 });
+      }
+      for (const loc of locs) {
+        const card = pileOf(loc)[loc.card];
+        let done = false;
+        for (let f = 0; f < 4; f++) {
+          if (canDrop([card], { type: 'foundation', pile: f })) {
+            pushHistory();
+            pileOf(loc).pop();
+            state.foundations[f].push(card);
+            if (loc.type === 'tableau') {
+              const sp = state.tableau[loc.pile];
+              if (sp.length && !sp[sp.length - 1].up) sp[sp.length - 1].up = true;
+            }
+            moves++; moved = done = true; break;
+          }
+        }
+        if (done) break;
+      }
+    }
+    sel = null; checkWin(); render();
+  }
+
+  function checkWin() {
+    if (state.foundations.every(f => f.length === 13)) {
+      won = true; stopTimer();
+      document.getElementById('winStats').textContent =
+        'Finished in ' + moves + ' moves, time ' + timeEl.textContent + '.';
+      overlay.classList.add('show');
+    }
+  }
+
+  function onCardClick(el) {
+    const loc = { type: el.dataset.type, pile: +el.dataset.pile, card: +el.dataset.index };
+    if (loc.type === 'stock') { clickStock(); return; }
+    if (sel && sel.type === loc.type && sel.pile === loc.pile && sel.card === loc.card) {
+      sel = null; render(); return;
+    }
+    if (sel) {
+      if ((loc.type === 'tableau' || loc.type === 'foundation') && tryMoveTo({ type: loc.type, pile: loc.pile })) return;
+    }
+    if (movable(loc)) { sel = loc; render(); return; }
+    sel = null; render();
+  }
+
+  function onSlotClick(type, pile) {
+    if (type === 'stock') { clickStock(); return; }
+    if (sel && (type === 'tableau' || type === 'foundation')) {
+      if (tryMoveTo({ type: type, pile: pile })) return;
+    }
+    sel = null; render();
+  }
+
+  function isSelected(type, pile, idx) {
+    if (!sel) return false;
+    if (sel.type !== type || sel.pile !== pile) return false;
+    return idx >= sel.card;
+  }
+
+  function cardEl(card, type, pile, idx) {
+    const el = document.createElement('div');
+    el.className = 'card' + (card.up ? '' : ' back') + (card.up && SUITS[card.suit].color === 'red' ? ' red' : '');
+    el.dataset.type = type; el.dataset.pile = pile; el.dataset.index = idx;
+    if (card.up) {
+      const r = RANKS[card.rank - 1], s = SUITS[card.suit].sym;
+      el.innerHTML =
+        '<div class="c tl">' + r + '<br>' + s + '</div>' +
+        '<div class="mid">' + s + '</div>' +
+        '<div class="c br">' + r + '<br>' + s + '</div>';
+      if (isSelected(type, pile, idx)) el.classList.add('selected');
+    }
+    return el;
+  }
+
+  function makePile(type, pileIdx) {
+    const el = document.createElement('div');
+    el.className = 'pile ' + type;
+    el.dataset.slot = type + '/' + pileIdx;
+    const slot = document.createElement('div');
+    slot.className = 'slot';
+    el.appendChild(slot);
+    return el;
+  }
+
+  function render() {
+    movesEl.textContent = moves;
+    board.innerHTML = '';
+
+    const hintDest = [];
+    if (sel) {
+      const cards = movable(sel);
+      if (cards) {
+        for (let i = 0; i < 7; i++) {
+          const d = { type: 'tableau', pile: i };
+          if (!(sel.type === 'tableau' && sel.pile === i) && canDrop(cards, d)) hintDest.push('tableau/' + i);
+        }
+        for (let f = 0; f < 4; f++) {
+          const d = { type: 'foundation', pile: f };
+          if (!(sel.type === 'foundation' && sel.pile === f) && canDrop(cards, d)) hintDest.push('foundation/' + f);
+        }
+      }
+    }
+    const hintSet = new Set(hintDest);
+
+    // top row: stock, waste, spacer, foundations
+    const stockPile = makePile('stock', 0);
+    if (state.stock.length) stockPile.appendChild(cardEl({ up: false }, 'stock', 0, state.stock.length - 1));
+    board.appendChild(stockPile);
+
+    const wastePile = makePile('waste', 0);
+    if (state.waste.length) {
+      const idx = state.waste.length - 1;
+      wastePile.appendChild(cardEl(state.waste[idx], 'waste', 0, idx));
+    }
+    board.appendChild(wastePile);
+
+    const spacer = document.createElement('div');
+    board.appendChild(spacer);
+
+    for (let f = 0; f < 4; f++) {
+      const fp = makePile('foundation', f);
+      if (hintSet.has('foundation/' + f)) fp.classList.add('hint');
+      const fpArr = state.foundations[f];
+      if (fpArr.length) fp.appendChild(cardEl(fpArr[fpArr.length - 1], 'foundation', f, fpArr.length - 1));
+      board.appendChild(fp);
+    }
+
+    for (let i = 0; i < 7; i++) {
+      const tp = makePile('tableau', i);
+      if (hintSet.has('tableau/' + i)) tp.classList.add('hint');
+      state.tableau[i].forEach((c, idx) => tp.appendChild(cardEl(c, 'tableau', i, idx)));
+      board.appendChild(tp);
+    }
+
+    layoutTableau();
+  }
+
+  function layoutTableau() {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const ch = parseFloat(rootStyle.getPropertyValue('--ch'));
+    document.querySelectorAll('.pile.tableau').forEach(el => {
+      const cards = el.querySelectorAll('.card');
+      if (!cards.length) return;
+      const H = el.clientHeight;
+      const fd = Math.max(6, Math.round(ch * 0.12));
+      const fu = Math.max(12, Math.round(ch * 0.30));
+      const offs = [0];
+      for (let i = 1; i < cards.length; i++) {
+        const d = cards[i - 1].classList.contains('back') ? fd : fu;
+        offs.push(offs[i - 1] + d);
+      }
+      const needed = offs[offs.length - 1];
+      let scale = 1;
+      if (needed + ch > H && needed > 0) scale = (H - ch) / needed;
+      for (let i = 0; i < cards.length; i++)
+        cards[i].style.top = Math.round(offs[i] * scale) + 'px';
+    });
+  }
+
+  function layout() {
+    const gap = 10, headerH = 52;
+    const w = (window.innerWidth - gap * 8) / 7;
+    const h = (window.innerHeight - headerH - gap * 3) / 2.4;
+    const cw = Math.max(40, Math.min(w, h, 110));
+    document.documentElement.style.setProperty('--cw', cw + 'px');
+    document.documentElement.style.setProperty('--ch', Math.round(cw * 1.4) + 'px');
+    render();
+  }
+
+  board.addEventListener('click', e => {
+    if (won) return;
+    const card = e.target.closest('.card');
+    if (card) { onCardClick(card); return; }
+    const pileEl = e.target.closest('.pile');
+    if (pileEl && pileEl.dataset.slot) {
+      const [t, p] = pileEl.dataset.slot.split('/');
+      onSlotClick(t, +p);
+    }
+  });
+
+  board.addEventListener('dblclick', e => {
+    if (won) return;
+    const card = e.target.closest('.card');
+    if (!card || card.dataset.type === 'stock') return;
+    const loc = { type: card.dataset.type, pile: +card.dataset.pile, card: +card.dataset.index };
+    const cards = movable(loc);
+    if (cards && cards.length === 1) autoToFoundation(loc);
+  });
+
+  document.getElementById('newBtn').addEventListener('click', newGame);
+  document.getElementById('playAgainBtn').addEventListener('click', newGame);
+  document.getElementById('undoBtn').addEventListener('click', undo);
+  document.getElementById('autoBtn').addEventListener('click', autoFinish);
+  document.getElementById('drawSel').addEventListener('change', e => { drawCount = +e.target.value; });
+  window.addEventListener('resize', layout);
+
+  layout();
+})();
+</script>
+</body>
+</html>
