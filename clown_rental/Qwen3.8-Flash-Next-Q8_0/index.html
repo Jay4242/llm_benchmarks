@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Clown Verleih MusterGamma – professionelle Clowns &amp; Clownduo für Kindergeburtstage, Firmenfeiern und Straßenfeste in Berlin und Brandenburg. Lachen inklusive!">
+<meta name="theme-color" content="#1A0B2E">
+<title>Clown Verleih MusterGamma | Clowns für unvergessliche Feiern in Berlin</title>
+<style>
+/* ==========================================================================
+   Clown Verleih MusterGamma — single-file demo page
+   All styles inline, system fonts only, no external resources.
+   ========================================================================== */
+
+/* ---------- Design tokens ---------- */
+:root{
+  --clr-bg:        #1A0B2E;   /* deep circus-night purple */
+  --clr-surface:   #2A1147;
+  --clr-surface-2: #351858;
+  --clr-red:       #E63946;
+  --clr-red-dark:  #B32533;
+  --clr-yellow:    #FFC93C;
+  --clr-pink:      #FF70A6;
+  --clr-teal:      #2EC4B6;
+  --clr-blue:      #4EA8DE;
+  --clr-cream:     #FFF6E9;
+  --clr-ink:       #241436;
+  --text:          #F5EFE6;
+  --text-dim:      #C9BADD;
+  --radius:        18px;
+  --shadow:        0 14px 34px rgba(0,0,0,.38);
+  --font-head: "Trebuchet MS","Segoe UI",Verdana,system-ui,sans-serif;
+  --font-body: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+/* ---------- Reset & base ---------- */
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family:var(--font-body);
+  background:var(--clr-bg);
+  color:var(--text);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:var(--clr-yellow); }
+h1,h2,h3{ font-family:var(--font-head); line-height:1.15; }
+section{ padding:5rem 1.25rem; }
+.container{ max-width:1120px; margin-inline:auto; }
+
+/* Skip link for keyboard users */
+.skip-link{
+  position:absolute; left:-9999px; top:0; z-index:100;
+  background:var(--clr-yellow); color:var(--clr-ink);
+  padding:.6rem 1rem; border-radius:0 0 10px 0; font-weight:700; text-decoration:none;
+}
+.skip-link:focus{ left:0; }
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-block; text-decoration:none; font-weight:700; cursor:pointer;
+  font-family:var(--font-head); font-size:1.05rem; letter-spacing:.02em;
+  padding:.85rem 1.8rem; border-radius:calc(var(--radius) + 8px);
+  border:3px solid transparent; transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.btn:hover,.btn:focus-visible{ transform:translateY(-3px) scale(1.02); }
+.btn-primary{
+  background:linear-gradient(135deg,var(--clr-red),var(--clr-pink));
+  color:#fff; box-shadow:0 8px 22px rgba(230,57,70,.45);
+}
+.btn-ghost{
+  background:transparent; color:var(--clr-cream); border-color:var(--clr-yellow);
+}
+.btn-ghost:hover{ background:rgba(255,201,60,.14); }
+
+/* ---------- Section headings ---------- */
+.section-title{
+  font-size:clamp(1.7rem,4vw,2.5rem); text-align:center; color:var(--clr-cream);
+  margin-bottom:.4rem;
+}
+.section-sub{ text-align:center; color:var(--text-dim); max-width:46rem; margin:0 auto 2.8rem; }
+.title-dot{ color:var(--clr-red); }
+.kicker{
+  display:block; text-align:center; text-transform:uppercase; letter-spacing:.28em;
+  font-size:.78rem; color:var(--clr-yellow); margin-bottom:.6rem; font-weight:700;
+}
+
+/* ==========================================================================
+   Header / navigation
+   ========================================================================== */
+.site-header{
+  position:sticky; top:0; z-index:60;
+  background:rgba(26,11,46,.86);
+  backdrop-filter:blur(8px);
+  border-bottom:2px solid rgba(255,201,60,.25);
+}
+.nav{
+  max-width:1120px; margin-inline:auto; padding:.7rem 1.25rem;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+}
+.brand{
+  display:flex; align-items:center; gap:.6rem; text-decoration:none;
+  font-family:var(--font-head); font-weight:800; font-size:1.15rem; color:var(--clr-cream);
+}
+.brand svg{ width:40px; height:40px; flex:none; }
+.nav-toggle{
+  display:none; background:none; border:2px solid var(--clr-yellow); border-radius:10px;
+  color:var(--clr-yellow); font-size:1.4rem; line-height:1; padding:.25rem .6rem; cursor:pointer;
+}
+.nav-links{ display:flex; gap:1.4rem; list-style:none; align-items:center; }
+.nav-links a{
+  color:var(--text); text-decoration:none; font-weight:600; font-size:.95rem;
+  padding:.3rem 0; border-bottom:2px solid transparent; transition:border-color .15s,color .15s;
+}
+.nav-links a:hover,.nav-links a:focus-visible{ border-color:var(--clr-red); color:var(--clr-yellow); }
+.nav-links .nav-cta{
+  background:var(--clr-red); padding:.45rem 1.1rem; border-radius:999px; border:none; color:#fff;
+}
+.nav-links .nav-cta:hover{ background:var(--clr-red-dark); color:#fff; }
+
+/* ==========================================================================
+   Hero — animated circus background (pure CSS + one inline SVG clown)
+   ========================================================================== */
+.hero{
+  position:relative; min-height:88vh; display:grid; place-items:center;
+  padding:6.5rem 1.25rem 4rem; overflow:hidden; text-align:center;
+  /* Animated gradient "night sky" */
+  background:linear-gradient(120deg,#2A0B3F,#4A1259,#7A1E3C,#3A0F55,#2A0B3F);
+  background-size:400% 400%;
+  animation:skyShift 18s ease-in-out infinite;
+}
+@keyframes skyShift{
+  0%{ background-position:0% 50%; }
+  50%{ background-position:100% 50%; }
+  100%{ background-position:0% 50%; }
+}
+/* Spinning spotlight glow behind the clown */
+.hero::before{
+  content:""; position:absolute; inset:-40%;
+  background:conic-gradient(from 0deg,
+    rgba(255,201,60,.16) 0deg 14deg, transparent 14deg 60deg,
+    rgba(255,112,166,.14) 60deg 74deg, transparent 74deg 120deg,
+    rgba(255,201,60,.16) 120deg 134deg, transparent 134deg 180deg,
+    rgba(255,112,166,.14) 180deg 194deg, transparent 194deg 240deg,
+    rgba(255,201,60,.16) 240deg 254deg, transparent 254deg 300deg,
+    rgba(255,112,166,.14) 300deg 314deg, transparent 314deg 360deg);
+  animation:spin 40s linear infinite; pointer-events:none;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+/* Drifting polka-dot texture */
+.hero::after{
+  content:""; position:absolute; inset:0; pointer-events:none; opacity:.35;
+  background-image:radial-gradient(rgba(255,246,233,.28) 2px, transparent 2.6px);
+  background-size:54px 54px;
+  animation:dotDrift 26s linear infinite;
+}
+@keyframes dotDrift{ to{ background-position:540px 540px; } }
+
+.hero-inner{
+  position:relative; z-index:3; max-width:640px;
+  display:flex; flex-direction:column; align-items:center; gap:1.1rem;
+}
+.hero h1{
+  font-size:clamp(2.2rem,6.5vw,4.2rem); color:var(--clr-cream);
+  text-shadow:0 4px 0 var(--clr-red-dark), 0 10px 30px rgba(0,0,0,.5);
+  animation:popIn .7s .05s both cubic-bezier(.2,1.6,.4,1);
+}
+.hero .tagline{
+  font-size:clamp(1.05rem,2.6vw,1.35rem); color:var(--clr-yellow);
+  animation:popIn .7s .2s both cubic-bezier(.2,1.6,.4,1);
+}
+.hero .hero-note{ color:var(--text-dim); font-size:.95rem; animation:popIn .7s .35s both; }
+.hero-actions{ display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; animation:popIn .7s .5s both; }
+@keyframes popIn{
+  from{ opacity:0; transform:translateY(26px) scale(.96); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* The clown illustration gently bobs; click it (JS) for a spin */
+.clown-stage{
+  width:min(230px,55vw); cursor:pointer; filter:drop-shadow(0 18px 22px rgba(0,0,0,.45));
+  animation:bob 4.5s ease-in-out infinite; transition:transform .2s;
+}
+.clown-stage:hover{ transform:scale(1.04); }
+.clown-stage.spin{ animation:clownSpin .9s ease-in-out, bob 4.5s ease-in-out infinite .9s; }
+@keyframes bob{ 0%,100%{ transform:translateY(0) rotate(-1deg);} 50%{ transform:translateY(-14px) rotate(1.5deg);} }
+@keyframes clownSpin{ from{ transform:rotate(0);} to{ transform:rotate(360deg);} }
+/* Wig hue shimmer */
+.wig{ animation:wigHue 8s linear infinite; }
+@keyframes wigHue{ to{ filter:hue-rotate(360deg); } }
+/* Hat lifts on hover */
+.clown-stage:hover .hat{ transform:translateY(-6px) rotate(-4deg); }
+.hat{ transition:transform .25s ease; transform-origin:50% 100%; }
+
+/* Floating CSS balloons */
+.balloon{
+  position:absolute; bottom:-24vh; width:var(--size); aspect-ratio:4/5; z-index:1;
+  background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.65), var(--c) 55%, rgba(0,0,0,.25));
+  border-radius:50% 50% 48% 48% / 56% 56% 44% 44%;
+  animation:rise var(--dur) linear var(--delay) infinite;
+  opacity:0; pointer-events:none;
+}
+.balloon::before{ /* knot */
+  content:""; position:absolute; left:50%; bottom:-6%; width:26%; height:8%;
+  transform:translateX(-50%); background:var(--c);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+}
+.balloon::after{ /* curly string */
+  content:""; position:absolute; left:calc(50% - 1px); top:100%; width:2px; height:70%;
+  background:rgba(255,246,233,.5);
+}
+@keyframes rise{
+  0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:0; }
+  8%{ opacity:.92; }
+  50%{ transform:translateY(-62vh) translateX(4vw) rotate(7deg); }
+  100%{ transform:translateY(-132vh) translateX(-3vw) rotate(-6deg); opacity:0; }
+}
+
+/* Circus-tent strip at the bottom of the hero */
+.tent-line{
+  position:absolute; left:0; right:0; bottom:0; height:30px; z-index:2;
+  background:
+    radial-gradient(circle at 15px -4px, transparent 13px, var(--clr-red) 14px) 0 100%/30px 30px repeat-x,
+    repeating-linear-gradient(90deg,var(--clr-red) 0 30px,var(--clr-cream) 30px 60px);
+  border-top:3px solid var(--clr-yellow);
+}
+
+/* ---------- Marquee strip ---------- */
+.marquee{
+  overflow:hidden; background:var(--clr-yellow); color:var(--clr-ink);
+  border-block:3px solid var(--clr-ink);
+}
+.marquee-track{
+  display:flex; gap:3rem; white-space:nowrap; width:max-content;
+  padding:.55rem 0; font-family:var(--font-head); font-weight:800; letter-spacing:.06em;
+  animation:marquee 22s linear infinite;
+}
+@keyframes marquee{ to{ transform:translateX(-50%); } }
+
+/* ==========================================================================
+   Trust badges
+   ========================================================================== */
+.badges{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:1rem; margin-top:-2.6rem; position:relative; z-index:5;
+}
+.badge{
+  background:var(--clr-surface); border:2px solid rgba(255,201,60,.3);
+  border-radius:var(--radius); padding:1rem 1.2rem; text-align:center; box-shadow:var(--shadow);
+}
+.badge strong{ display:block; color:var(--clr-yellow); font-family:var(--font-head); font-size:1.25rem; }
+.badge span{ font-size:.88rem; color:var(--text-dim); }
+
+/* ==========================================================================
+   Services
+   ========================================================================== */
+.services{ background:linear-gradient(180deg,var(--clr-bg),#230F3C 40%,var(--clr-bg)); }
+.card-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.5rem;
+}
+.card{
+  background:var(--clr-surface); border-radius:var(--radius); padding:1.8rem 1.5rem;
+  border:1px solid rgba(255,255,255,.07); box-shadow:var(--shadow);
+  position:relative; overflow:hidden; transition:transform .2s ease, border-color .2s ease;
+}
+.card::before{ /* colored top edge */
+  content:""; position:absolute; inset:0 0 auto 0; height:6px;
+  background:linear-gradient(90deg,var(--accent,var(--clr-red)),var(--clr-yellow));
+}
+.card:hover{ transform:translateY(-8px); border-color:var(--clr-yellow); }
+.card .icon{
+  width:64px; height:64px; border-radius:16px; display:grid; place-items:center;
+  background:rgba(255,201,60,.12); margin-bottom:1rem;
+}
+.card .icon svg{ width:38px; height:38px; stroke:var(--clr-yellow); }
+.card h3{ color:var(--clr-cream); font-size:1.2rem; margin-bottom:.5rem; }
+.card p{ color:var(--text-dim); font-size:.95rem; }
+.card .price-hint{
+  display:inline-block; margin-top:1rem; font-weight:700; color:var(--clr-teal); font-size:.9rem;
+}
+
+/* ==========================================================================
+   Pricing
+   ========================================================================== */
+.pricing-wrap{ overflow-x:auto; border-radius:var(--radius); box-shadow:var(--shadow); }
+table{
+  width:100%; border-collapse:collapse; min-width:640px;
+  background:var(--clr-surface);
+}
+caption{
+  caption-side:top; text-align:left; padding:.9rem 1.1rem;
+  color:var(--text-dim); font-size:.85rem; background:var(--clr-surface-2);
+}
+th,td{ padding:.95rem 1.1rem; text-align:center; border-bottom:1px solid rgba(255,255,255,.08); }
+thead th{
+  background:var(--clr-surface-2); font-family:var(--font-head); font-size:1rem;
+  color:var(--clr-cream); border-bottom:3px solid var(--clr-red);
+}
+tbody th{ text-align:left; color:var(--text); font-weight:600; white-space:nowrap; }
+.check{ color:var(--clr-teal); font-weight:900; }
+.dash{ color:#6E5C8A; }
+/* Highlight the popular tier column */
+td.popular,th.popular{ background:rgba(255,201,60,.10); }
+th.popular{ position:relative; }
+th.popular .tag{
+  display:inline-block; background:var(--clr-red); color:#fff; font-size:.65rem;
+  padding:.15rem .55rem; border-radius:999px; vertical-align:middle; margin-left:.4rem;
+  letter-spacing:.08em; text-transform:uppercase;
+}
+tfoot td{ font-size:.8rem; color:var(--text-dim); text-align:left; }
+
+/* ==========================================================================
+   Gallery — pure inline SVG illustrations
+   ========================================================================== */
+.gallery{ background:linear-gradient(180deg,var(--clr-bg),#160827); }
+.gallery-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1.5rem; }
+.frame{
+  background:linear-gradient(180deg,#3B1A63,#2A1147);
+  border:3px solid var(--clr-yellow); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow); transition:transform .25s ease;
+}
+.frame:hover{ transform:translateY(-6px) rotate(-.6deg); }
+.frame svg{ width:100%; height:auto; }
+.frame figcaption{
+  padding:.8rem 1rem; font-family:var(--font-head); font-weight:700;
+  color:var(--clr-cream); background:rgba(0,0,0,.25); font-size:.95rem;
+}
+/* Gentle motion inside one illustration */
+.juggle-a{ animation:juggleA 2.6s ease-in-out infinite; }
+.juggle-b{ animation:juggleA 2.6s ease-in-out .85s infinite; }
+.juggle-c{ animation:juggleA 2.6s ease-in-out 1.7s infinite; }
+@keyframes juggleA{
+  0%,100%{ transform:translate(0,0); }
+  25%{ transform:translate(34px,-26px); }
+  50%{ transform:translate(68px,0); }
+  75%{ transform:translate(34px,10px); }
+}
+.float-slow{ animation:bob 5.5s ease-in-out infinite; }
+
+/* ==========================================================================
+   FAQ
+   ========================================================================== */
+.faq details{
+  background:var(--clr-surface); border:1px solid rgba(255,255,255,.08);
+  border-radius:14px; padding:1rem 1.25rem; margin-bottom:.9rem;
+  transition:border-color .2s;
+}
+.faq details[open]{ border-color:var(--clr-yellow); }
+.faq summary{
+  cursor:pointer; font-family:var(--font-head); font-weight:700; color:var(--clr-cream);
+  list-style:none; position:relative; padding-right:2rem;
+}
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::after{
+  content:"+"; position:absolute; right:.2rem; top:50%; transform:translateY(-50%);
+  color:var(--clr-red); font-size:1.5rem; line-height:1; transition:transform .2s;
+}
+.faq details[open] summary::after{ transform:translateY(-50%) rotate(45deg); }
+.faq p{ margin-top:.7rem; color:var(--text-dim); font-size:.95rem; }
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+.contact-grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:2.5rem; align-items:start; }
+.contact-form{
+  background:var(--clr-surface); border-radius:var(--radius); padding:2rem;
+  border:1px solid rgba(255,255,255,.08); box-shadow:var(--shadow);
+}
+.field{ margin-bottom:1.15rem; }
+.field label{ display:block; font-weight:700; font-size:.9rem; margin-bottom:.35rem; color:var(--clr-cream); }
+.field .req{ color:var(--clr-red); }
+.field input,.field textarea,.field select{
+  width:100%; padding:.75rem .9rem; border-radius:12px; font:inherit; color:var(--clr-ink);
+  background:var(--clr-cream); border:2px solid transparent; transition:border-color .15s, box-shadow .15s;
+}
+.field textarea{ min-height:120px; resize:vertical; }
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none; border-color:var(--clr-red); box-shadow:0 0 0 4px rgba(230,57,70,.22);
+}
+.field input:invalid:not(:placeholder-shown){ border-color:var(--clr-red); }
+.row-2{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.checkbox-field{ display:flex; gap:.6rem; align-items:flex-start; font-size:.85rem; color:var(--text-dim); }
+.checkbox-field input{ width:auto; margin-top:.2rem; }
+.error-msg{ display:none; color:#FF9AA6; font-size:.82rem; margin-top:.35rem; font-weight:600; }
+.error-msg.visible{ display:block; }
+.success-msg{
+  display:none; margin-top:1.2rem; padding:1rem 1.2rem; border-radius:12px;
+  background:rgba(46,196,182,.16); border:2px solid var(--clr-teal); color:#BDF3EC; font-weight:600;
+}
+.success-msg.visible{ display:block; animation:popIn .4s both; }
+
+.contact-info{ display:flex; flex-direction:column; gap:1.1rem; }
+.info-card{
+  display:flex; gap:.9rem; align-items:flex-start; background:var(--clr-surface);
+  border-radius:14px; padding:1rem 1.2rem; border:1px solid rgba(255,255,255,.08);
+}
+.info-card svg{ width:26px; height:26px; flex:none; stroke:var(--clr-yellow); margin-top:.15rem; }
+.info-card a{ color:var(--clr-cream); text-decoration:none; word-break:break-word; }
+.info-card a:hover{ color:var(--clr-yellow); text-decoration:underline; }
+.info-card .label{ font-size:.75rem; text-transform:uppercase; letter-spacing:.14em; color:var(--text-dim); display:block; }
+.social-row{ display:flex; gap:.8rem; margin-top:.4rem; }
+.social-row a{
+  display:grid; place-items:center; width:46px; height:46px; border-radius:50%;
+  background:var(--clr-surface-2); border:2px solid var(--clr-yellow); transition:transform .18s, background .18s;
+}
+.social-row a:hover{ transform:translateY(-4px) rotate(6deg); background:var(--clr-red); }
+.social-row svg{ width:22px; height:22px; fill:var(--clr-cream); }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer{
+  background:#120621; border-top:3px solid var(--clr-red);
+  padding:2.5rem 1.25rem 2rem; text-align:center; color:var(--text-dim); font-size:.88rem;
+}
+.footer-note{ font-size:.78rem; margin-top:.6rem; }
+.footer-links{ display:flex; gap:1.4rem; justify-content:center; margin-top:.9rem; flex-wrap:wrap; }
+.footer-links a{ color:var(--text-dim); text-decoration:none; }
+.footer-links a:hover{ color:var(--clr-yellow); }
+
+/* ---------- Reveal on scroll (JS adds .visible) ---------- */
+.reveal{ opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.visible{ opacity:1; transform:none; }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width:860px){
+  .contact-grid{ grid-template-columns:1fr; }
+}
+@media (max-width:720px){
+  .nav-toggle{ display:block; }
+  .nav-links{
+    display:none; width:100%; flex-direction:column; align-items:stretch;
+    gap:.4rem; padding-top:.6rem;
+  }
+  .nav-links.open{ display:flex; }
+  .nav-links a{ padding:.6rem .4rem; border-bottom:1px solid rgba(255,255,255,.08); }
+  section{ padding:3.5rem 1rem; }
+  .row-2{ grid-template-columns:1fr; }
+}
+@media (max-width:420px){
+  .hero{ min-height:82vh; }
+  .btn{ width:100%; text-align:center; }
+}
+
+/* Respect users who prefer less motion */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001s !important; animation-iteration-count:1 !important;
+    transition-duration:.001s !important;
+  }
+  html{ scroll-behavior:auto; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!-- ======================= HEADER / NAV ======================= -->
+<header class="site-header">
+  <nav class="nav" aria-label="Hauptnavigation">
+    <a class="brand" href="#hero" aria-label="Zur Startseite – Clown Verleih MusterGamma">
+      <!-- Mini clown logo (inline SVG) -->
+      <svg viewBox="0 0 40 40" role="img" aria-hidden="true">
+        <circle cx="20" cy="22" r="13" fill="#FFF6E9"/>
+        <circle cx="15" cy="20" r="2" fill="#241436"/>
+        <circle cx="25" cy="20" r="2" fill="#241436"/>
+        <circle cx="20" cy="24.5" r="3.2" fill="#E63946"/>
+        <path d="M14 29q6 5 12 0" stroke="#B32533" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M7 13q4-9 13-9t13 9q-6-4-13-4t-13 4Z" fill="#FFC93C"/>
+        <circle cx="20" cy="3.5" r="2.4" fill="#E63946"/>
+      </svg>
+      <span>Clown&nbsp;Verleih&nbsp;MusterGamma</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Menü öffnen oder schließen">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#leistungen">Leistungen</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+      <li><a class="nav-cta" href="#kontakt">Jetzt anfragen</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- ======================= HERO ======================= -->
+  <section class="hero" id="hero" aria-labelledby="hero-title">
+    <!-- Floating CSS balloons (decorative) -->
+    <span class="balloon" style="--c:#E63946;--size:64px;--dur:14s;--delay:0s;left:6%"  aria-hidden="true"></span>
+    <span class="balloon" style="--c:#FFC93C;--size:48px;--dur:18s;--delay:3s;left:18%" aria-hidden="true"></span>
+    <span class="balloon" style="--c:#4EA8DE;--size:72px;--dur:16s;--delay:6s;left:78%" aria-hidden="true"></span>
+    <span class="balloon" style="--c:#FF70A6;--size:54px;--dur:20s;--delay:2s;left:88%" aria-hidden="true"></span>
+    <span class="balloon" style="--c:#2EC4B6;--size:44px;--dur:22s;--delay:9s;left:32%" aria-hidden="true"></span>
+    <span class="balloon" style="--c:#FF70A6;--size:60px;--dur:17s;--delay:11s;left:62%" aria-hidden="true"></span>
+
+    <div class="hero-inner">
+      <!-- Friendly clown illustration (inline SVG). Click = spin (see JS). -->
+      <svg class="clown-stage" id="clownStage" viewBox="0 0 200 250" role="img"
+           aria-label="Fröhlicher Clown mit roter Nase, gelbem Hut und gepunkteter Krause" tabindex="0">
+        <!-- Body -->
+        <path d="M60 250 C60 190 74 168 100 168 C126 168 140 190 140 250 Z" fill="#4EA8DE"/>
+        <circle cx="86" cy="205" r="5" fill="#FFC93C"/>
+        <circle cx="100" cy="222" r="5" fill="#FFC93C"/>
+        <circle cx="114" cy="205" r="5" fill="#FFC93C"/>
+        <!-- Ruffle collar -->
+        <ellipse cx="100" cy="170" rx="46" ry="14" fill="#E63946"/>
+        <ellipse cx="100" cy="166" rx="40" ry="11" fill="#FFC93C"/>
+        <!-- Wig -->
+        <g class="wig">
+          <circle cx="55" cy="92" r="21" fill="#FF70A6"/>
+          <circle cx="145" cy="92" r="21" fill="#FF70A6"/>
+          <circle cx="66" cy="66" r="18" fill="#FF70A6"/>
+          <circle cx="134" cy="66" r="18" fill="#FF70A6"/>
+        </g>
+        <!-- Face -->
+        <circle cx="100" cy="100" r="44" fill="#FFF6E9"/>
+        <!-- Eyes -->
+        <circle cx="85" cy="92" r="4.6" fill="#241436"/>
+        <circle cx="115" cy="92" r="4.6" fill="#241436"/>
+        <path d="M78 82q7-7 14 0" stroke="#4EA8DE" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <path d="M108 82q7-7 14 0" stroke="#4EA8DE" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+        <!-- Rosy cheeks -->
+        <circle cx="74" cy="106" r="7" fill="#FFB3C7" opacity=".85"/>
+        <circle cx="126" cy="106" r="7" fill="#FFB3C7" opacity=".85"/>
+        <!-- Red nose -->
+        <circle cx="100" cy="105" r="10" fill="#E63946"/>
+        <circle cx="96.5" cy="101.5" r="3" fill="#FF8C97"/>
+        <!-- Smile -->
+        <path d="M78 121q22 19 44 0" stroke="#B32533" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+        <!-- Hat -->
+        <g class="hat">
+          <path d="M78 60 L100 6 L122 60 Z" fill="#FFC93C" stroke="#241436" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="100" cy="6" r="7" fill="#E63946"/>
+          <ellipse cx="100" cy="60" rx="26" ry="6" fill="#2EC4B6" stroke="#241436" stroke-width="2"/>
+        </g>
+      </svg>
+
+      <h1 id="hero-title">Clown Verleih MusterGamma</h1>
+      <p class="tagline">Große Nasen. Große Show. Riesiges Lachen. 🤡</p>
+      <p class="hero-note">Professionelle Clowns für Kindergeburtstage, Firmenfeiern und Straßenfeste in Berlin &amp; Brandenburg.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#kontakt">Jetzt Clown anfragen</a>
+        <a class="btn btn-ghost" href="#leistungen">Unsere Shows entdecken</a>
+      </div>
+    </div>
+
+    <!-- Circus-tent bunting strip -->
+    <div class="tent-line" aria-hidden="true"></div>
+  </section>
+
+  <!-- Marquee strip -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Willkommen im Zirkus des Lachens ★</span><span>Klassiker mit Rote-Nase-Magie ★</span><span>Duo „Plitsch &amp; Platsch“ ★</span><span>Seifenblasen-Show ★</span><span>Stelzenläufer ★</span>
+      <span>Willkommen im Zirkus des Lachens ★</span><span>Klassiker mit Rote-Nase-Magie ★</span><span>Duo „Plitsch &amp; Platsch“ ★</span><span>Seifenblasen-Show ★</span><span>Stelzenläufer ★</span>
+    </div>
+  </div>
+
+  <!-- Trust badges -->
+  <div class="container">
+    <div class="badges">
+      <div class="badge reveal"><strong>15+ Jahre</strong><span>Erfahrung auf Berliner Bühnen &amp; Straßen</span></div>
+      <div class="badge reveal"><strong>6 Clowns</strong><span>&amp; Clownduos im festen Ensemble</span></div>
+      <div class="badge reveal"><strong>Versichert</strong><span>&amp; mit Gagenverordnung-konformen Verträgen</span></div>
+      <div class="badge reveal"><strong>Berlin &amp; Brandenburg</strong><span>mobile Anreise ab 30&nbsp;€ Umkreis</span></div>
+    </div>
+  </div>
+
+  <!-- ======================= SERVICES ======================= -->
+  <section class="services" id="leistungen" aria-labelledby="leistungen-title">
+    <div class="container">
+      <span class="kicker reveal">Unsere Shows</span>
+      <h2 class="section-title reveal" id="leistungen-title">Leistungen mit Lachgarantie<span class="title-dot">.</span></h2>
+      <p class="section-sub reveal">Ob Geburtstag, Sommerfest oder Firmenfeier – wir bringen die passende Portion Unsinn mit. Alle Auftritte sind altersgerecht, improvisiert und frei von peinlichen Witzen auf Kosten der Gäste.</p>
+
+      <div class="card-grid">
+        <!-- Card 1: Birthday -->
+        <article class="card reveal" style="--accent:#E63946">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 21h16"/>
+              <path d="M5 21v-7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v7"/>
+              <path d="M5 15c1.4 1.3 2.6 1.3 4 0s2.6-1.3 4 0 2.6 1.3 4 0"/>
+              <path d="M12 12V8"/><path d="M12 5.5c.6-.7.6-1.5 0-2.5-.6 1-.6 1.8 0 2.5Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Geburtstags-Clown</h3>
+          <p>60–90 Minuten Zauber, Seifenblasen, Luftballon-Tiere und Spiele – abgestimmt auf das Motto und das Alter der Geburtstagskinder.</p>
+          <span class="price-hint">ab 149&nbsp;€</span>
+        </article>
+
+        <!-- Card 2: Company party -->
+        <article class="card reveal" style="--accent:#4EA8DE">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="11" width="16" height="9" rx="1.5"/>
+              <path d="M4 15h16"/><path d="M12 11v9"/>
+              <path d="M12 11c-4 0-5.5-1.4-5.5-3S9 6 12 11Z"/>
+              <path d="M12 11c4 0 5.5-1.4 5.5-3S15 6 12 11Z"/>
+            </svg>
+          </div>
+          <h3>Firmenfeier &amp; Event</h3>
+          <p>Dezenter Walking-Act oder große Bühnenshow: Wir sorgen auf Sommerfesten, Einweihungen und Weihnachtsfeiern für beste Laune.</p>
+          <span class="price-hint">ab 299&nbsp;€</span>
+        </article>
+
+        <!-- Card 3: Kids workshop -->
+        <article class="card reveal" style="--accent:#2EC4B6">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"/><path d="M10 21h4"/>
+              <path d="M12 3a6 6 0 0 1 3.6 10.8c-.7.6-1.1 1.3-1.1 2.2H9.5c0-.9-.4-1.6-1.1-2.2A6 6 0 0 1 12 3Z"/>
+              <path d="M12 7v2"/>
+            </svg>
+          </div>
+          <h3>Clown-Werkstatt für Kinder</h3>
+          <p> Mitmach-Workshop: Schminken, Balancieren, Purzelbäume und die erste eigene Mini-Show. Für Kitas, Schulen und Feriencamps.</p>
+          <span class="price-hint">ab 120&nbsp;€</span>
+        </article>
+
+        <!-- Card 4: Street festival -->
+        <article class="card reveal" style="--accent:#FF70A6">
+          <div class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <ellipse cx="8" cy="8" rx="4.2" ry="5"/>
+              <ellipse cx="16" cy="7" rx="3.6" ry="4.4"/>
+              <ellipse cx="12.5" cy="11" rx="3.6" ry="4.4"/>
+              <path d="M8 13 L12 21 L16 11.4"/>
+            </svg>
+          </div>
+          <h3>Straßenfest &amp; Parade</h3>
+          <p>Stelzenläufer, Ballon-Künstler und das Duo „Plitsch &amp; Platsch“ als Publikumsmagnet für Kirmes, Straßenfest und Einschulung.</p>
+          <span class="price-hint">ab 199&nbsp;€</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= PRICING ======================= -->
+  <section id="preise" aria-labelledby="preise-title">
+    <div class="container">
+      <span class="kicker reveal">Preise</span>
+      <h2 class="section-title reveal" id="preise-title">Unsere Pakete<span class="title-dot">.</span></h2>
+      <p class="section-sub reveal">Faire Pauschalen inkl. Anfahrt innerhalb Berlins, Aufbau und Verkleidungsreinigung. Alle Preise sind Endpreise fiktiver Natur.</p>
+
+      <div class="pricing-wrap reveal">
+        <table>
+          <caption>Preisübersicht der Clown-Pakete (Stand: 2026, fiktive Beispielpreise)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Enthalten</th>
+              <th scope="col">Kurzauftritt</th>
+              <th scope="col" class="popular">Große Party <span class="tag">Beliebt</span></th>
+              <th scope="col">Ganztag</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Auftrittsdauer</th>
+              <td>30 Min.</td><td class="popular">60–90 Min.</td><td>bis 8 Std. (mit Pausen)</td>
+            </tr>
+            <tr>
+              <th scope="row">Anzahl Clowns</th>
+              <td>1</td><td class="popular">1 oder Duo</td><td>2–3</td>
+            </tr>
+            <tr>
+              <th scope="row">Zauber- &amp; Ballonshow</th>
+              <td><span class="check">✔</span></td><td class="popular"><span class="check">✔</span></td><td><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Luftballon-Tiere für alle Kinder</th>
+              <td><span class="dash">—</span></td><td class="popular"><span class="check">✔</span></td><td><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Seifenblasen-Show</th>
+              <td><span class="dash">—</span></td><td class="popular"><span class="check">✔</span></td><td><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Mitmach-Spiele &amp; Moderation</th>
+              <td><span class="dash">—</span></td><td class="popular"><span class="check">✔</span></td><td><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Anfahrt Berlin &amp; 30-km-Umkreis</th>
+              <td><span class="check">✔</span></td><td class="popular"><span class="check">✔</span></td><td><span class="check">✔</span></td>
+            </tr>
+            <tr>
+              <th scope="row"><strong>Preis (Pauschale)</strong></th>
+              <td><strong>89&nbsp;€</strong></td>
+              <td class="popular"><strong>169&nbsp;€</strong></td>
+              <td><strong>449&nbsp;€</strong></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4">Sonderwünsche (Stelzenlauf, Feuerwerk-Alternative, englischsprachiger Auftritt) auf Anfrage. Anzahlung 30&nbsp;%, Storno kostenfrei bis 14 Tage vor dem Termin.</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= GALLERY ======================= -->
+  <section class="gallery" id="galerie" aria-labelledby="galerie-title">
+    <div class="container">
+      <span class="kicker reveal">Galerie</span>
+      <h2 class="section-title reveal" id="galerie-title">Einblicke in die Manege<span class="title-dot">.</span></h2>
+      <p class="section-sub reveal">Handgezeichnete Impressionen aus unserem Show-Alltag – komplett als Inline-SVG, damit auch bei Stromausfall alles bunt bleibt.</p>
+
+      <div class="gallery-grid">
+        <!-- Illustration 1: Classic clown portrait -->
+        <figure class="frame reveal">
+          <svg viewBox="0 0 300 220" role="img" aria-label="Porträt eines Clowns mit blauer Perücke und Rüschenkragen">
+            <rect width="300" height="220" fill="#241145"/>
+            <circle cx="60" cy="40" r="3" fill="#FFC93C" opacity=".8"/>
+            <circle cx="250" cy="60" r="2.4" fill="#FF70A6" opacity=".8"/>
+            <circle cx="230" cy="30" r="2" fill="#2EC4B6" opacity=".8"/>
+            <g class="wig">
+              <circle cx="105" cy="105" r="34" fill="#4EA8DE"/>
+              <circle cx="195" cy="105" r="34" fill="#4EA8DE"/>
+              <circle cx="120" cy="70" r="28" fill="#4EA8DE"/>
+              <circle cx="180" cy="70" r="28" fill="#4EA8DE"/>
+            </g>
+            <circle cx="150" cy="110" r="52" fill="#FFF6E9"/>
+            <circle cx="133" cy="102" r="5" fill="#241436"/>
+            <circle cx="167" cy="102" r="5" fill="#241436"/>
+            <circle cx="150" cy="118" r="12" fill="#E63946"/>
+            <path d="M126 138q24 20 48 0" stroke="#B32533" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M112 170q38 26 76 0l-10 24h-56Z" fill="#E63946"/>
+          </svg>
+          <figcaption>„Fips“ – unser Klassiker mit Rote-Nase-Magie</figcaption>
+        </figure>
+
+        <!-- Illustration 2: Balloon bunch -->
+        <figure class="frame reveal">
+          <svg viewBox="0 0 300 220" role="img" aria-label="Bunter Luftballonstrauß vor dunklem Himmel">
+            <rect width="300" height="220" fill="#173A7A"/>
+            <circle cx="40" cy="34" r="2.6" fill="#FFF6E9" opacity=".7"/>
+            <circle cx="266" cy="24" r="2.2" fill="#FFF6E9" opacity=".7"/>
+            <g class="float-slow">
+              <path d="M150 176 L112 74 M150 176 L150 60 M150 176 L190 78" stroke="#FFF6E9" stroke-width="2" opacity=".7"/>
+              <ellipse cx="112" cy="62" rx="27" ry="33" fill="#E63946"/>
+              <ellipse cx="150" cy="46" rx="27" ry="33" fill="#FFC93C"/>
+              <ellipse cx="190" cy="66" rx="27" ry="33" fill="#2EC4B6"/>
+              <circle cx="104" cy="52" r="6" fill="#FFFFFF" opacity=".45"/>
+              <circle cx="142" cy="36" r="6" fill="#FFFFFF" opacity=".45"/>
+              <circle cx="182" cy="56" r="6" fill="#FFFFFF" opacity=".45"/>
+              <path d="M107 95 l5 8 h-10 Z M145 79 l5 8 h-10 Z M185 99 l5 8 h-10 Z" fill="#FFF6E9"/>
+            </g>
+            <path d="M146 176h8l-2 30h-4Z" fill="#FFF6E9"/>
+            <ellipse cx="150" cy="208" rx="26" ry="6" fill="#0E2A5C"/>
+          </svg>
+          <figcaption>Ballon-Tiere in allen Farben – Affe, Hund &amp; Schwert</figcaption>
+        </figure>
+
+        <!-- Illustration 3: Juggling -->
+        <figure class="frame reveal">
+          <svg viewBox="0 0 300 220" role="img" aria-label="Clown balanciert und jongliert drei Bälle">
+            <rect width="300" height="220" fill="#40124F"/>
+            <circle cx="150" cy="150" r="34" fill="#FFF6E9"/>
+            <circle cx="140" cy="144" r="4" fill="#241436"/>
+            <circle cx="161" cy="144" r="4" fill="#241436"/>
+            <circle cx="150" cy="153" r="7" fill="#E63946"/>
+            <path d="M138 165q12 11 25 0" stroke="#B32533" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+            <path d="M126 122 l-8 -18 M174 122 l8 -18" stroke="#FFF6E9" stroke-width="5" stroke-linecap="round"/>
+            <ellipse cx="127" cy="123" rx="9" ry="6" fill="#2EC4B6" transform="rotate(-20 127 123)"/>
+            <ellipse cx="173" cy="123" rx="9" ry="6" fill="#2EC4B6" transform="rotate(20 173 123)"/>
+            <path d="M150 184v28" stroke="#FFF6E9" stroke-width="6" stroke-linecap="round"/>
+            <ellipse cx="150" cy="214" rx="52" ry="7" fill="#2A0B3F"/>
+            <g class="juggle-a" style="transform:translate(104px,58px)">
+              <circle r="13" fill="#FFC93C"/><circle cx="-4" cy="-4" r="3.5" fill="#fff" opacity=".5"/>
+            </g>
+            <g class="juggle-b" style="transform:translate(138px,42px)">
+              <circle r="13" fill="#E63946"/><circle cx="-4" cy="-4" r="3.5" fill="#fff" opacity=".5"/>
+            </g>
+            <g class="juggle-c" style="transform:translate(172px,58px)">
+              <circle r="13" fill="#4EA8DE"/><circle cx="-4" cy="-4" r="3.5" fill="#fff" opacity=".5"/>
+            </g>
+          </svg>
+          <figcaption>Jonglage-Einlage zum Finale jeder Show</figcaption>
+        </figure>
+
+        <!-- Illustration 4: Party -->
+        <figure class="frame reveal">
+          <svg viewBox="0 0 300 220" role="img" aria-label="Konfetti, Partyhut und eine Torte mit Kerzen">
+            <rect width="300" height="220" fill="#123C33"/>
+            <circle cx="40" cy="40" r="4" fill="#FFC93C"/>
+            <rect x="70" y="24" width="7" height="7" fill="#FF70A6" transform="rotate(20 73 27)"/>
+            <circle cx="240" cy="34" r="3.4" fill="#4EA8DE"/>
+            <rect x="210" y="60" width="7" height="7" fill="#2EC4B6" transform="rotate(-15 213 63)"/>
+            <circle cx="270" cy="90" r="4" fill="#E63946"/>
+            <circle cx="30" cy="120" r="3" fill="#FF70A6"/>
+            <!-- Party hat -->
+            <path d="M60 130 L92 52 L124 130 Z" fill="#E63946" stroke="#FFC93C" stroke-width="3"/>
+            <circle cx="92" cy="50" r="8" fill="#FFC93C"/>
+            <path d="M72 104h40M78 82h28" stroke="#FFC93C" stroke-width="4" stroke-linecap="round"/>
+            <!-- Cake -->
+            <rect x="160" y="140" width="100" height="44" rx="8" fill="#FFF6E9"/>
+            <path d="M160 154q12 10 25 0t25 0 25 0 25 0v-6a8 8 0 0 0-8-8h-84a8 8 0 0 0-8 8Z" fill="#FF70A6"/>
+            <rect x="160" y="176" width="100" height="8" rx="4" fill="#E63946"/>
+            <rect x="182" y="118" width="5" height="20" rx="2.5" fill="#4EA8DE"/>
+            <rect x="208" y="114" width="5" height="24" rx="2.5" fill="#2EC4B6"/>
+            <path d="M184.5 110q4-6 0-10-4 4 0 10Z" fill="#FFC93C"/>
+            <path d="M210.5 106q4-6 0-10-4 4 0 10Z" fill="#FFC93C"/>
+          </svg>
+          <figcaption>Kuchen, Konfetti &amp; Krach – Geburtstage nach Hausmacher-Art</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FAQ ======================= -->
+  <section class="faq" id="faq" aria-labelledby="faq-title">
+    <div class="container" style="max-width:760px">
+      <span class="kicker reveal">Häufige Fragen</span>
+      <h2 class="section-title reveal" id="faq-title">Bevor wir die Nase aufsetzen …<span class="title-dot">.</span></h2>
+      <p class="section-sub reveal">Die wichtigsten Fragen rund um Buchung, Ablauf und Sicherheit.</p>
+
+      <details class="reveal">
+        <summary>Ab welchem Alter sind die Auftritte geeignet?</summary>
+        <p>Ab 3 Jahren fühlen sich Kinder von unseren Shows begeistert. Für die Allerkleinsten (1–3 Jahre) bieten wir eine entspannte „Kuschel-Clown“-Variante ohne laute Musik und ohne plötzliche Überraschungen.</p>
+      </details>
+      <details class="reveal">
+        <summary>Kommen die Clowns auch zu mir nach Hause?</summary>
+        <p>Ja! Wir spielen in Gärten, Wohnzimmern, Kneipen, Festhallen – überall in Berlin und im Umkreis von 30&nbsp;km. Für Auftritte im Freien brauchen wir lediglich eine Fläche von etwa 3 × 3 Metern.</p>
+      </details>
+      <details class="reveal">
+        <summary>Sind die Clowns versichert?</summary>
+        <p>Selbstverständlich. Alle unsere Künstlerinnen und Künstler sind über unseren Betrieb haftpflichtversichert, und wir arbeiten mit sauberen, schriftlichen Verträgen.</p>
+      </details>
+      <details class="reveal">
+        <summary>Wie lange im Voraus sollte ich buchen?</summary>
+        <p>Für Samstage in der Saison (März bis Oktober) empfehlen wir 6–8 Wochen Vorlauf. Kurzfristige Anfragen innerhalb von 7 Tagen sind möglich – fragt einfach nach, oft geht mehr, als man denkt.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ======================= CONTACT ======================= -->
+  <section id="kontakt" aria-labelledby="kontakt-title">
+    <div class="container">
+      <span class="kicker reveal">Kontakt</span>
+      <h2 class="section-title reveal" id="kontakt-title">Clown anfragen<span class="title-dot">.</span></h2>
+      <p class="section-sub reveal">Schreibt uns Euer Anliegen – wir melden uns in der Regel innerhalb von 24 Stunden zurück. (Demo-Formular: Es werden keine Daten übertragen.)</p>
+
+      <div class="contact-grid">
+        <!-- Contact form (demo only, handled client-side) -->
+        <form class="contact-form reveal" id="bookingForm" novalidate>
+          <div class="row-2">
+            <div class="field">
+              <label for="name">Name <span class="req" aria-hidden="true">*</span></label>
+              <input type="text" id="name" name="name" placeholder="Erika Beispiel" autocomplete="name" minlength="2" required>
+            </div>
+            <div class="field">
+              <label for="email">E-Mail <span class="req" aria-hidden="true">*</span></label>
+              <input type="email" id="email" name="email" placeholder="erika@beispiel.de" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="phone">Telefon (optional)</label>
+              <input type="tel" id="phone" name="phone" placeholder="+49 30 987654" autocomplete="tel">
+            </div>
+            <div class="field">
+              <label for="eventDate">Wunschtermin</label>
+              <input type="date" id="eventDate" name="eventDate">
+            </div>
+          </div>
+          <div class="field">
+            <label for="eventType">Art der Veranstaltung</label>
+            <select id="eventType" name="eventType">
+              <option value="geburtstag">Kindergeburtstag</option>
+              <option value="feier">Firmenfeier / Event</option>
+              <option value="strassenfest">Straßenfest / Parade</option>
+              <option value="werkstatt">Clown-Werkstatt (Kita/Schule)</option>
+              <option value="sonstiges">Sonstiges</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Ihre Nachricht <span class="req" aria-hidden="true">*</span></label>
+            <textarea id="message" name="message" minlength="20" maxlength="600" placeholder="Erzählen Sie uns kurz: Wer feiert, wie viele Kinder, wo und wann?" required></textarea>
+            <div class="error-msg" id="formError" role="alert">Bitte prüfen Sie Ihre Eingaben: Name, eine gültige E-Mail-Adresse und eine Nachricht mit mindestens 20 Zeichen sind erforderlich.</div>
+          </div>
+          <div class="field checkbox-field">
+            <input type="checkbox" id="privacy" name="privacy" required>
+            <label for="privacy" style="font-weight:400">Ich habe die (fiktiven) Hinweise zum Datenschutz gelesen und bin damit einverstanden, dass meine Anfrage zur Bearbeitung gespeichert wird. <span class="req" aria-hidden="true">*</span></label>
+          </div>
+          <button class="btn btn-primary" type="submit">Anfrage abschicken 🎈</button>
+          <div class="success-msg" id="formSuccess" role="status"></div>
+        </form>
+
+        <!-- Contact details -->
+        <aside class="contact-info reveal" aria-label="Kontaktdaten">
+          <div class="info-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.6"/>
+            </svg>
+            <div>
+              <span class="label">Adresse</span>
+              <address style="font-style:normal; color:var(--clr-cream)">
+                Clown Verleih MusterGamma<br>Musterstraße 123<br>10115 Berlin
+              </address>
+            </div>
+          </div>
+          <div class="info-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.13.96.36 1.9.7 2.8a2 2 0 0 1-.45 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.45c.9.34 1.84.57 2.8.7a2 2 0 0 1 1.7 2.05Z"/>
+            </svg>
+            <div>
+              <span class="label">Telefon</span>
+              <a href="tel:+493012345678">+49 (0)30 12345678</a>
+            </div>
+          </div>
+          <div class="info-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m3 6.5 9 7 9-7"/>
+            </svg>
+            <div>
+              <span class="label">E-Mail</span>
+              <a href="mailto:info@clown-verleih-mustergamma.de">info@clown-verleih-mustergamma.de</a>
+            </div>
+          </div>
+          <div class="info-card">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>
+            </svg>
+            <div>
+              <span class="label">Erreichbarkeit</span>
+              <span style="color:var(--clr-cream)">Mo–Fr 9–18 Uhr<br>Termine auch am Wochenende</span>
+            </div>
+          </div>
+          <div>
+            <span class="label" style="font-size:.75rem; text-transform:uppercase; letter-spacing:.14em; color:var(--text-dim)">Folgt uns</span>
+            <div class="social-row">
+              <a href="https://instagram.com/clownmustergamma" target="_blank" rel="noopener noreferrer" aria-label="Instagram-Profil @clownmustergamma (öffnet in neuem Tab)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.96.24 2.65.51.72.28 1.33.66 1.94 1.27.61.61.99 1.22 1.27 1.94.27.69.46 1.48.51 2.65.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.96-.51 2.65a5.36 5.36 0 0 1-1.27 1.94c-.61.61-1.22.99-1.94 1.27-.69.27-1.48.46-2.65.51-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.96-.24-2.65-.51a5.36 5.36 0 0 1-1.94-1.27 5.36 5.36 0 0 1-1.27-1.94c-.27-.69-.46-1.48-.51-2.65C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.24-1.96.51-2.65.28-.72.66-1.33 1.27-1.94.61-.61 1.22-.99 1.94-1.27.69-.27 1.48-.46 2.65-.51C8.42 2.21 8.8 2.2 12 2.2Zm0 1.8c-3.15 0-3.52.01-4.76.07-.99.04-1.53.21-1.89.35-.47.18-.81.4-1.17.76-.36.36-.58.7-.76 1.17-.14.36-.31.9-.35 1.89-.06 1.24-.07 1.61-.07 4.76s.01 3.52.07 4.76c.04.99.21 1.53.35 1.89.18.47.4.81.76 1.17.36.36.7.58 1.17.76.36.14.9.31 1.89.35 1.24.06 1.61.07 4.76.07s3.52-.01 4.76-.07c.99-.04 1.53-.21 1.89-.35.47-.18.81-.4 1.17-.76.36-.36.58-.7.76-1.17.14-.36.31-.9.35-1.89.06-1.24.07-1.61.07-4.76s-.01-3.52-.07-4.76c-.04-.99-.21-1.53-.35-1.89a3.16 3.16 0 0 0-.76-1.17 3.16 3.16 0 0 0-1.17-.76c-.36-.14-.9-.31-1.89-.35-1.24-.06-1.61-.07-4.76-.07Zm0 3.06a4.94 4.94 0 1 1 0 9.88 4.94 4.94 0 0 1 0-9.88Zm0 1.8a3.14 3.14 0 1 0 0 6.28 3.14 3.14 0 0 0 0-6.28Zm5.15-3.2a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z"/></svg>
+              </a>
+              <a href="https://facebook.com/ClownVerleihMusterGamma" target="_blank" rel="noopener noreferrer" aria-label="Facebook-Seite Clown Verleih MusterGamma (öffnet in neuem Tab)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.09 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.7 4.53-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.09 24 18.1 24 12.07Z"/></svg>
+              </a>
+            </div>
+            <p style="font-size:.8rem; color:var(--text-dim); margin-top:.5rem">@clownmustergamma &nbsp;·&nbsp; /ClownVerleihMusterGamma</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="site-footer">
+  <p><strong style="color:var(--clr-cream); font-family:var(--font-head)">Clown Verleih MusterGamma</strong> · Musterstraße 123 · 10115 Berlin</p>
+  <p>Tel.: <a href="tel:+493012345678">+49 (0)30 12345678</a> · <a href="mailto:info@clown-verleih-mustergamma.de">info@clown-verleih-mustergamma.de</a></p>
+  <div class="footer-links">
+    <a href="#hero">Start</a><a href="#leistungen">Leistungen</a><a href="#preise">Preise</a><a href="#galerie">Galerie</a><a href="#faq">FAQ</a><a href="#kontakt">Kontakt</a>
+  </div>
+  <p style="margin-top:1rem">© <span id="year">2026</span> Clown Verleih MusterGamma · Impressum · Datenschutz · AGB</p>
+  <p class="footer-note">Diese Seite ist eine fiktive Demonstrationsseite. Alle Kontaktdaten, Preise und Texte sind frei erfunden.</p>
+</footer>
+
+<script>
+/* ==========================================================================
+   Clown Verleih MusterGamma — behaviour
+   Vanilla JS only. No network calls; the form is simulated client-side.
+   ========================================================================== */
+(function () {
+  "use strict";
+
+  var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ----- Current year in footer ----- */
+  var yearEl = document.getElementById("year");
+  if (yearEl) { yearEl.textContent = String(new Date().getFullYear()); }
+
+  /* ----- Mobile navigation toggle ----- */
+  var navToggle = document.getElementById("navToggle");
+  var navLinks = document.getElementById("navLinks");
+  if (navToggle && navLinks) {
+    navToggle.addEventListener("click", function () {
+      var open = navLinks.classList.toggle("open");
+      navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      navToggle.textContent = open ? "✕" : "☰";
+    });
+    // Close the menu after choosing a link (mobile UX)
+    navLinks.addEventListener("click", function (event) {
+      if (event.target.tagName === "A") {
+        navLinks.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+        navToggle.textContent = "☰";
+      }
+    });
+  }
+
+  /* ----- Reveal sections on scroll ----- */
+  var revealEls = document.querySelectorAll(".reveal");
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    // Show everything immediately when motion is reduced or IO is missing
+    revealEls.forEach(function (el) { el.classList.add("visible"); });
+  } else {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+    revealEls.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* ----- Easter egg: click/Enter on the hero clown makes it spin ----- */
+  var clown = document.getElementById("clownStage");
+  if (clown && !prefersReducedMotion) {
+    var spin = function () {
+      clown.classList.remove("spin");
+      // Force reflow so the animation can replay on repeated clicks
+      void clown.getBoundingClientRect();
+      clown.classList.add("spin");
+    };
+    clown.addEventListener("click", spin);
+    clown.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); spin(); }
+    });
+  }
+
+  /* ----- Booking form: client-side validation + simulated submit ----- */
+  var form = document.getElementById("bookingForm");
+  var errorBox = document.getElementById("formError");
+  var successBox = document.getElementById("formSuccess");
+
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault(); // Demo only — never send data anywhere
+
+      var name = form.elements["name"].value.trim();
+      var email = form.elements["email"].value.trim();
+      var message = form.elements["message"].value.trim();
+      var privacy = form.elements["privacy"].checked;
+      var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+
+      if (name.length < 2 || !emailOk || message.length < 20 || !privacy) {
+        if (errorBox) { errorBox.classList.add("visible"); }
+        if (successBox) { successBox.classList.remove("visible"); }
+        // Focus the first invalid field for keyboard/screen-reader users
+        var firstBad = null;
+        if (name.length < 2) { firstBad = form.elements["name"]; }
+        else if (!emailOk) { firstBad = form.elements["email"]; }
+        else if (message.length < 20) { firstBad = form.elements["message"]; }
+        else if (!privacy) { firstBad = form.elements["privacy"]; }
+        if (firstBad) { firstBad.focus(); }
+        return;
+      }
+
+      if (errorBox) { errorBox.classList.remove("visible"); }
+      if (successBox) {
+        var firstName = name.split(/\s+/)[0];
+        successBox.textContent =
+          "🎪 Danke, " + firstName + "! Ihre Anfrage ist (natürlich nur lokal in diesem Browser) " +
+          "eingegangen. Wir melden uns schnellstmöglich – usually within one circus lap.";
+        successBox.classList.add("visible");
+      }
+      form.reset();
+    });
+  }
+})();
+</script>
+</body>
+</html>
