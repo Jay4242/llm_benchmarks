@@ -1,0 +1,1 @@
+From https://github.com/comchris/quickrobot/blob/main/prompts/clownpage.md
